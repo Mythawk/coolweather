@@ -2,3 +2,4 @@
 <network-security-config>
     <base-config cleartextTrafficPermitted="true" />
 </network-security-config>
+<!-- 由于android 9 以上无法使用明码访问网络（httpx协议) 需要开启  同时需要配置androidManifest Applicaton 属性  -->

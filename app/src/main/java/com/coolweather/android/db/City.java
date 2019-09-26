@@ -6,7 +6,7 @@ public class City extends DataSupport {
     private int id;
     private String cityName;//城市名称
     private int cityCode;//城市编号
-    private  int provinceId;//城市所属省的ID
+    private int provinceId;//城市所属省的ID
 
     public int getId() {
         return id;
