@@ -9,7 +9,7 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
-import com.coolweather.android.gson.Weather;
+import com.coolweather.android.gson.today.HeWeatherNow;
 import com.coolweather.android.util.HttpUtil;
 import com.coolweather.android.util.Utility;
 
@@ -20,8 +20,6 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class AutoUpdateService extends Service {
-    public AutoUpdateService() {
-    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -48,9 +46,9 @@ public class AutoUpdateService extends Service {
         String weatherString = preferences.getString("weather",null);
         if (weatherString !=null){
             //有缓存是直接解析天气数据
-            Weather weather = Utility.handleWeatherResponse(weatherString);
+            HeWeatherNow weather = Utility.handleWeatherResponse(weatherString);
             String weatherId = weather.basic.weatherId;
-            String weatherUrl = "http://guolin.tech/api/weather?cityid=" + weatherId + "&key=bc0418b57b2d4918819d3974ac1285d9";
+            String weatherUrl = "https://free-api.heweather.net/s6/weather/now?location=" + weatherId + "key=275bf4c8500f4c41a2901261c58696f6";
             HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
@@ -60,7 +58,7 @@ public class AutoUpdateService extends Service {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     String responseTextt = response.body().string();
-                    Weather weather = Utility.handleWeatherResponse(responseTextt);
+                    HeWeatherNow weather = Utility.handleWeatherResponse(responseTextt);
                     if (weather != null &&"ok".equals(weather.status)){
                         SharedPreferences.Editor editor = PreferenceManager.
                             getDefaultSharedPreferences(AutoUpdateService.this).edit();

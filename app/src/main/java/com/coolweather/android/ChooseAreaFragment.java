@@ -3,7 +3,6 @@ package com.coolweather.android;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.coolweather.android.db.City;
-import com.coolweather.android.db.Country;
+import com.coolweather.android.db.County;
 import com.coolweather.android.db.Province;
 import com.coolweather.android.util.HttpUtil;
 import com.coolweather.android.util.Utility;
@@ -48,7 +47,7 @@ public class ChooseAreaFragment extends Fragment {
     private List<String>dataList = new ArrayList<>();
     private List<Province>provinceList;//省列表
     private List<City>cityList;//市列表
-    private List<Country>countryList;//县列表
+    private List<County> countyList;//县列表
     private Province selectedProvince;//选中的省
     private City selectedCity;//选中的城市
     private int currentLevel;//选中的级别
@@ -78,7 +77,7 @@ public class ChooseAreaFragment extends Fragment {
                     selectedCity = cityList.get(position);
                     queryCounties();
                 }else if (currentLevel == LEVEL_COUNTY) {
-                    String weatherId = countryList.get(position).getWeatherId();
+                    String weatherId = countyList.get(position).getWeatherId();
                     if (getActivity() instanceof MainActivity) {
                         Intent intent = new Intent(getActivity(), WeatherActivity.class);
                         intent.putExtra("weather_id", weatherId);
@@ -148,11 +147,11 @@ public class ChooseAreaFragment extends Fragment {
     private void queryCounties() {
         titleText.setText(selectedCity.getCityName());
         backButton.setVisibility(View.VISIBLE);
-        countryList = DataSupport.where("cityid = ?",String.valueOf(selectedCity.getId())).find(Country.class);
-        if (countryList.size()>0){
+        countyList = DataSupport.where("cityid = ?",String.valueOf(selectedCity.getId())).find(County.class);
+        if (countyList.size()>0){
             dataList.clear();
-            for (Country country:countryList){
-                dataList.add(country.getCountryName());
+            for (County county : countyList){
+                dataList.add(county.getCountryName());
             }
             adapter.notifyDataSetChanged();
             listView.setSelection(0);
